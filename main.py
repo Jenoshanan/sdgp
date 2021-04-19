@@ -48,5 +48,27 @@ def view():
     return render_template("view.html",rows=rows)
             
 
+@app.route('/loginValidation',methods = ["POST","GET"])
+def loginValidation():  
+    msg = "msg"  
+    if request.method == "POST":  
+          
+            username = request.form["username"]  
+            password = request.form["password"]   
+            con = sqlite3.connect("admin.db")  
+            con.row_factory = sqlite3.Row  
+            cur = con.cursor()  
+            cur.execute("select * from Admin")  
+            rows = cur.fetchall()
+             
+            for row in rows :
+                print (row) 
+                if (username == row["username"]) and (password == row["password"]):                      
+                        msg = "Memeber successfully login" 
+                else :
+                        msg = "can not login"  
+    return render_template("response.html", msg = msg)  
+            
+
 if __name__ == '__main__':
     app.run(debug=True)
