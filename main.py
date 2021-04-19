@@ -37,6 +37,7 @@ def saveDetails():
         finally:  
             return render_template("response.html", msg = msg)  
             con.close()
+<<<<<<< HEAD
 
 @app.route('/loginValidation', methods=['POST'])
 def loginValidation():
@@ -53,6 +54,9 @@ def loginValidation():
     else:
         return render_template('login.html')
 
+=======
+            
+>>>>>>> 4c0c184c8396f435cf8c4acb0a4a03f461b0570f
 
 
 if __name__ == '__main__':
