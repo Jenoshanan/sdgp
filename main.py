@@ -36,22 +36,7 @@ def saveDetails():
         finally:  
             return render_template("response.html", msg = msg)  
             con.close()
-
-@app.route('/loginValidation', methods=['POST'])
-def loginValidation():
-    email = request.form.get('email')
-    password = request.form.get('password')
-
-    cursor.execute("""SELECT * FROM 'users' WHERE 'email' LIKE '{}' AND 'password' LIKE '{}'""".format(email, password))
-
-    users = cursor.fetchall()
-
-    if len(users) > 0:
-
-        return render_template('home.html')
-    else:
-        return render_template('login.html')
-
+            
 
 
 if __name__ == '__main__':
