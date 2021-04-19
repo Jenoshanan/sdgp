@@ -36,8 +36,16 @@ def saveDetails():
         finally:  
             return render_template("response.html", msg = msg)  
             con.close()
-            
 
+@app.route("/view")  
+def view():  
+    con = sqlite3.connect("admin.db")  
+    con.row_factory = sqlite3.Row  
+    cur = con.cursor()  
+    cur.execute("select * from Admin")  
+    rows = cur.fetchall()
+    return render_template("view.html",rows=rows)
+            
 
 if __name__ == '__main__':
     app.run(debug=True)
