@@ -38,21 +38,15 @@ def saveDetails():
             return render_template("response.html", msg = msg)  
             con.close()
 
-# @app.route('/loginValidation', methods=['POST'])
-# def loginValidation():
-#     email = request.form.get('email')
-#     password = request.form.get('password')
-
-#     cursor.execute("""SELECT * FROM 'users' WHERE 'email' LIKE '{}' AND 'password' LIKE '{}'""".format(email, password))
-
-#     users = Cursor.fetchall()
-
-#     if len(users) > 0:
-
-#         return render_template('home.html')
-#     else:
-#         return render_template('login.html')
-
+@app.route("/view")  
+def view():  
+    con = sqlite3.connect("admin.db")  
+    con.row_factory = sqlite3.Row  
+    cur = con.cursor()  
+    cur.execute("select * from Admin")  
+    rows = cur.fetchall()
+    return render_template("view.html",rows=rows)
+            
 
 if __name__ == '__main__':
     app.run(debug=True)
