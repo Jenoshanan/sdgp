@@ -1,13 +1,10 @@
 from flask import Flask, render_template, request,session
-from flask_sqlalchemy import SQLAlchemy
-import mysql.connector
 import os
+from flask import *  
+import sqlite3  
+
 
 app = Flask(__name__)
-app.secret_key=os.urandom(24)
-
-conn = mysql.connector.connect(host="remotemysql.com", user="NckRDEPdvn", password="IdXZK0rFXm", database="NckRDEPdvn")
-cursor = conn.cursor()
 
 
 @app.route('/')
@@ -19,6 +16,26 @@ def home():
 def about():
     return render_template('signUp.html')
 
+   
+@app.route('/adduser',methods = ["POST","GET"])
+def saveDetails():  
+    msg = "msg"  
+    if request.method == "POST":  
+        try:  
+            username = request.form["username"]  
+            email = request.form["email"]  
+            password = request.form["password"]   
+            with sqlite3.connect("admin.db") as con:  
+                cur = con.cursor()  
+                cur.execute("INSERT into Admin (username, email, password) values (?,?,?)",(username, email, password))  
+                con.commit()  
+                msg = "Memeber successfully Added"  
+        except:  
+            con.rollback()  
+            msg = "We can not add the employee to the list"  
+        finally:  
+            return render_template("response.html", msg = msg)  
+            con.close()
 
 @app.route('/loginValidation', methods=['POST'])
 def loginValidation():
