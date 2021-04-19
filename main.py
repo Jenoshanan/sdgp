@@ -1,3 +1,4 @@
+from sqlite3.dbapi2 import Cursor
 from flask import Flask, render_template, request,session
 import os
 from flask import *  
@@ -44,7 +45,7 @@ def loginValidation():
 
     cursor.execute("""SELECT * FROM 'users' WHERE 'email' LIKE '{}' AND 'password' LIKE '{}'""".format(email, password))
 
-    users = cursor.fetchall()
+    users = Cursor.fetchall()
 
     if len(users) > 0:
 
