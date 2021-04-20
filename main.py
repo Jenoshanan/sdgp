@@ -50,7 +50,7 @@ def view():
 
 @app.route('/loginValidation',methods = ["POST","GET"])
 def loginValidation():  
-    msg = "msg"  
+    msg = "msg" 
     if request.method == "POST":  
           
             username = request.form["username"]  
