@@ -58,7 +58,8 @@ def loginValidation():
             con = sqlite3.connect("admin.db")  
             con.row_factory = sqlite3.Row  
             cur = con.cursor()  
-            cur.execute("select * from Admin WHERE username = ?",username)  
+            cur.execute("select * from Admin WHERE username = ?",[username,])  
+            cur.execute("select * from Admin WHERE password = ?",[password,])  
             rows = cur.fetchall()
              
             for row in rows :
