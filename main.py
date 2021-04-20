@@ -1,12 +1,12 @@
 from sqlite3.dbapi2 import Cursor
-from flask import Flask, render_template, request,session
+from flask import Flask, render_template, request,redirect,session
 import os
 from flask import *  
 import sqlite3  
 
 
 app = Flask(__name__)
-
+app.secret_key=os.urandom(24)
 
 @app.route('/')
 def home():
@@ -20,7 +20,7 @@ def about():
    
 @app.route('/adduser',methods = ["POST","GET"])
 def saveDetails():  
-    msg = "msg"  
+  
     if request.method == "POST":  
         try:  
             username = request.form["username"]  
@@ -29,14 +29,20 @@ def saveDetails():
             with sqlite3.connect("admin.db") as con:  
                 cur = con.cursor()  
                 cur.execute("INSERT into Admin (username, email, password) values (?,?,?)",(username, email, password))  
-                con.commit()  
-                msg = "Memeber successfully Added"  
+                con.commit()               
         except:  
             con.rollback()  
-            msg = "We can not add the employee to the list"  
         finally:  
-            return render_template("response.html", msg = msg)  
+            return redirect('/')
             con.close()
+
+@app.route('/response')
+def response():  
+    if 'ID' in session:
+        return render_template('response.html') 
+    else:    
+        return redirect('/') 
+
 
 @app.route("/view")  
 def view():  
@@ -50,7 +56,6 @@ def view():
 
 @app.route('/loginValidation',methods = ["POST","GET"])
 def loginValidation():  
-    msg = "msg" 
     if request.method == "POST":  
           
             username = request.form["username"]  
@@ -65,11 +70,17 @@ def loginValidation():
             for row in rows :
                 print (row) 
                 if (username == row["username"]) and (password == row["password"]):                      
-                        msg = "Memeber successfully login" 
+                        session['ID'] = rows[0][0]
+                        return redirect('/response')  
                 else :
-                        msg = "can not login"  
-    return render_template("response.html", msg = msg)  
+                        return redirect('/')  
+  
             
+@app.route('/logout')
+def logout():  
+    session.pop('ID')
+    return redirect('/') 
+
 
 if __name__ == '__main__':
     app.run(debug=True)
